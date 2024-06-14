@@ -3168,8 +3168,15 @@ class GSFontInfoValue(GSBase):  # Combines localizable/nonlocalizable properties
         return list(self._localized_values.values())[0]
 
     @value.setter
-    def value(self, value):
-        self._value = value
+    def value(self, values):
+        if type(values) is list:
+            self._localized_values = {}
+            for v in values:
+                if "language" not in v or "value" not in v:
+                    continue
+                self._localized_values[v["language"]] = v["value"]
+        else:
+            self._value = values
 
 
 class GSInstance(GSBase):
@@ -4753,6 +4760,30 @@ class GSFont(GSBase):
     @copyright.setter
     def copyright(self, value):
         self.properties["copyrights"] = value
+
+    @property
+    def licenseURL(self):
+        return self.properties.get("licenseURL", "")
+
+    @licenseURL.setter
+    def licenseURL(self, value):
+        self.properties["licenseURL"] = value
+
+    @property
+    def description(self, value):
+        return self.properties.get("descriptions", "")
+
+    @description.setter
+    def description(self, value):
+        self.properties["descriptions"] = value
+
+    @property
+    def trademark(self, value):
+        return self.properties.get("trademarks", "")
+
+    @trademark.setter
+    def trademark(self, value):
+        self.properties["trademarks"] = value
 
     @property
     def designer(self):
